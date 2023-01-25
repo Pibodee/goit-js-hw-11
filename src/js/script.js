@@ -45,7 +45,7 @@ async function getImages(name) {
       `${API_URL}?key=${KEY}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${IMAGES_PER_PAGE}`
     );
     shown += resp.data.hits.length;
-    console.log(resp);
+    console.log(resp.data);
     createMarkup(resp.data);
   } catch (error) {
     console.log(error);
@@ -53,9 +53,25 @@ async function getImages(name) {
 }
 
 function createMarkup(array) {
-    const markup = array.hits.map(
-        item => {
-            
-      }
-  );
+    const markup = array.hits.map(item => {
+        const { largeImageURL, webformatURL, tags, likes, views, comments, downloads } = item;
+    return `<div class="photo-card">
+    <a class = "photo-link href="${largeImageURL}"">
+  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+  <div class="info">
+    <p class="info-item">
+      <b>Likes: ${likes}</b>
+    </p>
+    <p class="info-item">
+      <b>Views: ${views}</b>
+    </p>
+    <p class="info-item">
+      <b>Comments: ${comments}</b>
+    </p>
+    <p class="info-item">
+      <b>Downloads: ${downloads}</b>
+    </p>
+  </div>
+</div>`}).join('');
+    gallery.insertAdjacentHTML('beforeend', markup)
 }
