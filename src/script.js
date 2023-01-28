@@ -86,7 +86,7 @@ function createMarkup(array) {
 
 function load() {
   const name = refs.input.value.trim();
-  refs.loadMore.style.display = 'none';
+  
 
   page += 1;
   getImages(name, page).then(resp => {
