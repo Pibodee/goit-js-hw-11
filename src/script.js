@@ -26,6 +26,8 @@ function onInput() {
 function onSubmit(evt) {
   evt.preventDefault();
   gallery.innerHTML = '';
+  shown = 0;
+  console.log(shown)
 
   const name = refs.input.value.trim();
   if (!name) {
@@ -43,7 +45,7 @@ function onSubmit(evt) {
        Notiflix.Notify.info(
           `Hooray! We found ${resp.totalHits} images.`
         );
-         if (resp.hits.length < 40) {
+         if (resp.hits.length < 40 ) {
            refs.loadMore.style.display = 'none';
            return Notiflix.Notify.info(
              "We're sorry, but you've reached the end of search results"
@@ -90,18 +92,21 @@ function createMarkup(array) {
   simpleLightBox.refresh();
 }
 
- function load() {
+function load() {
+   
   const name = refs.input.value.trim();
   page += 1;
   getImages(name, page).then(resp => {
+    console.log(resp.hits.length)
     shown += resp.hits.length;
+    console.log(shown);
     createMarkup(resp);
     if (shown >= resp.totalHits) {
       refs.loadMore.style.display = 'none';
       return Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results"
       );
-    }
+    } 
   });
 }
 
