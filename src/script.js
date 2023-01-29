@@ -26,15 +26,15 @@ function onInput() {
 function onSubmit(evt) {
   evt.preventDefault();
   gallery.innerHTML = '';
+  page = 1;
   shown = 0;
-  console.log(shown)
 
   const name = refs.input.value.trim();
   if (!name) {
     refs.loadMore.style.display = 'none';
   } else {
     getImages(name).then(resp => {
-        shown += resp.hits.length;
+      shown += resp.hits.length;
       if (resp.hits.length === 0) {
         return Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -42,16 +42,14 @@ function onSubmit(evt) {
       } else {
         createMarkup(resp);
         refs.loadMore.style.display = 'flex';
-       Notiflix.Notify.info(
-          `Hooray! We found ${resp.totalHits} images.`
-        );
-         if (resp.hits.length < 40 ) {
-           refs.loadMore.style.display = 'none';
-           return Notiflix.Notify.info(
-             "We're sorry, but you've reached the end of search results"
-           );
-         }
-      } 
+        Notiflix.Notify.info(`Hooray! We found ${resp.totalHits} images.`);
+        if (resp.hits.length < 40) {
+          refs.loadMore.style.display = 'none';
+          return Notiflix.Notify.info(
+            "We're sorry, but you've reached the end of search results"
+          );
+        }
+      }
     });
   }
 }
@@ -93,20 +91,17 @@ function createMarkup(array) {
 }
 
 function load() {
-   
   const name = refs.input.value.trim();
   page += 1;
   getImages(name, page).then(resp => {
-    console.log(resp.hits.length)
     shown += resp.hits.length;
-    console.log(shown);
     createMarkup(resp);
     if (shown >= resp.totalHits) {
       refs.loadMore.style.display = 'none';
       return Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results"
       );
-    } 
+    }
   });
 }
 
